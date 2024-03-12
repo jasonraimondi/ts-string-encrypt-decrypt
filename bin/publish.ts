@@ -7,25 +7,37 @@ await build({
   entryPoints: ["./mod.ts"],
   outDir: "./npm",
   shims: {
-    // see JS docs for overview and more options
-    deno: true,
+    deno: {
+      test: true,
+    },
+    // crypto: true,
+  },
+  compilerOptions: {
+    lib: ["esnext", "dom"],
   },
   package: {
-    // package.json properties
-    name: "your-package",
-    version: Deno.args[0],
+    name: "@jmondi/string-encrypt-decrypt",
+    version: Deno.args[0]?.replace("v", ""),
     description: "Your package.",
+    author: "Jason Raimondi <jason@raimondi.us>",
     license: "MIT",
+    engines: {
+      node: ">=20.0.0",
+    },
     repository: {
       type: "git",
-      url: "git+https://github.com/username/repo.git",
+      url: "git+https://github.com/jasonraimondi/ts-string-encrypt-decrypt.git",
     },
     bugs: {
-      url: "https://github.com/username/repo/issues",
+      url: "https://github.com/jasonraimondi/ts-string-encrypt-decrypt/issues",
     },
   },
   postBuild() {
-    // steps to run after building and before running the tests
+    Deno.writeTextFileSync(
+      "npm/.npmignore",
+      "esm/testdata/\nscript/testdata/\n",
+      { append: true },
+    );
     Deno.copyFileSync("LICENSE", "npm/LICENSE");
     Deno.copyFileSync("README.md", "npm/README.md");
   },

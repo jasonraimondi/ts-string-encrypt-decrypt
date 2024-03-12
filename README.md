@@ -1,0 +1,1 @@
+# @jmondi/string-encrypt-decrypt
