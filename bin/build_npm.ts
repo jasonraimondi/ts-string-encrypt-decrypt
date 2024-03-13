@@ -10,7 +10,7 @@ await build({
     deno: {
       test: true,
     },
-    // crypto: true,
+    crypto: true,
   },
   compilerOptions: {
     lib: ["esnext", "dom"],
@@ -18,7 +18,7 @@ await build({
   package: {
     name: "@jmondi/string-encrypt-decrypt",
     version: Deno.args[0]?.replace("v", ""),
-    description: "Your package.",
+    description: "Encrypt and decrypt strings using crypto",
     author: "Jason Raimondi <jason@raimondi.us>",
     license: "MIT",
     engines: {
