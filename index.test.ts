@@ -1,6 +1,6 @@
 import { assertEquals } from "https://deno.land/std/testing/asserts.ts";
+
 import { StringEncrypter } from "./index.ts";
-import { assertThrows } from "https://deno.land/std@0.219.1/assert/assert_throws.ts";
 
 Deno.test("StringEncrypter class", async (t) => {
   const cryptoKey = await StringEncrypter.generateKey();
