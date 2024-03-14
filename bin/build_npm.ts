@@ -7,9 +7,9 @@ await build({
   entryPoints: ["./server.ts", "./browser.ts"],
   outDir: "./npm",
   shims: {
-    // deno: {
-    //   test: true,
-    // },
+    deno: {
+      test: true,
+    },
     crypto: true,
   },
   compilerOptions: {
