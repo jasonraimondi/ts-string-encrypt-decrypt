@@ -37,7 +37,7 @@ abstract class AbstractStringEncrypter {
   async encrypt(clearText: string): Promise<EncryptedStringData> {
     const iv = this.crypto.getRandomValues(new Uint8Array(12));
     const ciphertext = await this.subtle.encrypt(
-      {name: "AES-GCM", iv},
+      { name: "AES-GCM", iv },
       this.cryptoKey,
       this.textEncoder.encode(clearText),
     );
@@ -56,7 +56,7 @@ abstract class AbstractStringEncrypter {
     const cipherText = AbstractStringEncrypter.base64Decode(decodedCipherText);
     const iv = AbstractStringEncrypter.base64Decode(decodedIV);
     const decrypted = await this.subtle.decrypt(
-      {name: "AES-GCM", iv},
+      { name: "AES-GCM", iv },
       this.cryptoKey,
       cipherText,
     );
@@ -85,7 +85,7 @@ export class BrowserStringEncrypter extends AbstractStringEncrypter {
     const cryptoKey = await window.crypto.subtle.importKey(
       "jwk",
       JSON.parse(jwkString),
-      {name: "AES-GCM"},
+      { name: "AES-GCM" },
       true,
       ["encrypt", "decrypt"],
     );
@@ -93,31 +93,31 @@ export class BrowserStringEncrypter extends AbstractStringEncrypter {
   }
 }
 
-// export class StringEncrypter extends AbstractStringEncrypter {
-//   public readonly crypto = crypto;
-//   public readonly subtle = crypto.subtle!;
-//
-//   static generateKey(): Promise<CryptoKey> {
-//     return crypto.subtle.generateKey(
-//       {
-//         name: "AES-GCM",
-//         length: 256,
-//       },
-//       true,
-//       ["encrypt", "decrypt"],
-//     );
-//   }
-//
-//   static async fromCryptoString(
-//     jwkString: string,
-//   ): Promise<BrowserStringEncrypter> {
-//     const cryptoKey = await crypto.subtle.importKey(
-//       "jwk",
-//       JSON.parse(jwkString),
-//       {name: "AES-GCM"},
-//       true,
-//       ["encrypt", "decrypt"],
-//     );
-//     return new BrowserStringEncrypter(cryptoKey);
-//   }
-// }
+export class StringEncrypter extends AbstractStringEncrypter {
+  public readonly crypto = crypto;
+  public readonly subtle = crypto.subtle!;
+
+  static generateKey(): Promise<CryptoKey> {
+    return crypto.subtle.generateKey(
+      {
+        name: "AES-GCM",
+        length: 256,
+      },
+      true,
+      ["encrypt", "decrypt"],
+    );
+  }
+
+  static async fromCryptoString(
+    jwkString: string,
+  ): Promise<BrowserStringEncrypter> {
+    const cryptoKey = await crypto.subtle.importKey(
+      "jwk",
+      JSON.parse(jwkString),
+      { name: "AES-GCM" },
+      true,
+      ["encrypt", "decrypt"],
+    );
+    return new BrowserStringEncrypter(cryptoKey);
+  }
+}
