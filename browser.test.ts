@@ -1,6 +1,6 @@
 import { assertEquals } from "https://deno.land/std/testing/asserts.ts";
 
-import { BrowserStringEncrypter } from "./index.ts";
+import { BrowserStringEncrypter } from "./browser.ts";
 
 Deno.test("BrowserStringEncrypter class", async (t) => {
   const cryptoKey = await BrowserStringEncrypter.generateKey();

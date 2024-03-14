@@ -4,12 +4,12 @@ import { build, emptyDir } from "https://deno.land/x/dnt/mod.ts";
 await emptyDir("./npm");
 
 await build({
-  entryPoints: ["./mod.ts"],
+  entryPoints: ["./server.ts", "./browser.ts"],
   outDir: "./npm",
   shims: {
-    deno: {
-      test: true,
-    },
+    // deno: {
+    //   test: true,
+    // },
     crypto: true,
   },
   compilerOptions: {

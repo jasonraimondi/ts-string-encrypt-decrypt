@@ -1,6 +1,6 @@
 export type EncryptedStringData = `str-enc:${string}:${string}`;
 
-abstract class AbstractStringEncrypter {
+export abstract class AbstractStringEncrypter {
   protected readonly textDecoder = new TextDecoder();
   protected readonly textEncoder = new TextEncoder();
 
@@ -48,7 +48,7 @@ abstract class AbstractStringEncrypter {
     return `str-enc:${decodedCipherText}:${decodedIV}`;
   }
 
-  async decrypt(encryptedData: EncryptedStringData): Promise<string> {
+  async decrypt(encryptedData: string | EncryptedStringData): Promise<string> {
     if (!this.isEncryptedStringData(encryptedData)) {
       throw new Error("Invalid encrypted data");
     }
@@ -61,63 +61,5 @@ abstract class AbstractStringEncrypter {
       cipherText,
     );
     return this.textDecoder.decode(decrypted);
-  }
-}
-
-export class BrowserStringEncrypter extends AbstractStringEncrypter {
-  public readonly crypto = window.crypto;
-  public readonly subtle = window.crypto.subtle!;
-
-  static generateKey(): Promise<CryptoKey> {
-    return window.crypto.subtle.generateKey(
-      {
-        name: "AES-GCM",
-        length: 256,
-      },
-      true,
-      ["encrypt", "decrypt"],
-    );
-  }
-
-  static async fromCryptoString(
-    jwkString: string,
-  ): Promise<BrowserStringEncrypter> {
-    const cryptoKey = await window.crypto.subtle.importKey(
-      "jwk",
-      JSON.parse(jwkString),
-      { name: "AES-GCM" },
-      true,
-      ["encrypt", "decrypt"],
-    );
-    return new BrowserStringEncrypter(cryptoKey);
-  }
-}
-
-export class StringEncrypter extends AbstractStringEncrypter {
-  public readonly crypto = crypto;
-  public readonly subtle = crypto.subtle!;
-
-  static generateKey(): Promise<CryptoKey> {
-    return crypto.subtle.generateKey(
-      {
-        name: "AES-GCM",
-        length: 256,
-      },
-      true,
-      ["encrypt", "decrypt"],
-    );
-  }
-
-  static async fromCryptoString(
-    jwkString: string,
-  ): Promise<BrowserStringEncrypter> {
-    const cryptoKey = await crypto.subtle.importKey(
-      "jwk",
-      JSON.parse(jwkString),
-      { name: "AES-GCM" },
-      true,
-      ["encrypt", "decrypt"],
-    );
-    return new BrowserStringEncrypter(cryptoKey);
   }
 }
